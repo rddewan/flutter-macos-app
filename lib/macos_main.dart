@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_demo/screens/account_screen.dart';
+import 'package:macos_demo/screens/home_screen.dart';
+import 'package:macos_demo/screens/product_screen.dart';
+import 'package:macos_demo/screens/setting_screen.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 void main() {
@@ -35,6 +39,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   int currentIndex = 0;
+  final List<Widget> pages = const [
+    HomeScreen(),
+    ProductScreen(),
+    AccountScreen(),
+    SettingScreen(),
+  ];
   
 
   @override
@@ -89,8 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         )
       ),
-      child: const Center(
-        child: Text('Home'),
+      child: IndexedStack(
+        index: currentIndex,
+        children: pages,
       ),
 
     );
