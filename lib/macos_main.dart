@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MacosApp(
-      title: 'Flutter Demo',
-      theme: MacosThemeData.light(),
+      title: 'Macos Demo',
+      theme: MacosThemeData.light() ,
       darkTheme: MacosThemeData.dark(),
       themeMode: ThemeMode.system,
       home: const MyHomePage(title: 'Home Page'),
