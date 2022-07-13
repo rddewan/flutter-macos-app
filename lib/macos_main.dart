@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_demo/models/user_model.dart';
 import 'package:macos_demo/screens/account_screen.dart';
 import 'package:macos_demo/screens/home_screen.dart';
 import 'package:macos_demo/screens/product_screen.dart';
 import 'package:macos_demo/screens/setting_screen.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  await Hive.openBox<UserModel>('user_box');
+  
   runApp(const MyApp());
 }
 

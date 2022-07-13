@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:macos_demo/base/base_form_text_field.dart';
+import 'package:macos_demo/models/user_model.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class AddUserScreen extends StatefulWidget {
@@ -10,13 +12,32 @@ class AddUserScreen extends StatefulWidget {
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
+  late Box<UserModel> userBox;
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressAddress = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    userBox = Hive.box('user_box');
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    genderController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    addressAddress.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
