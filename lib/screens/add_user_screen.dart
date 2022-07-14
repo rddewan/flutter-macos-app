@@ -20,7 +20,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   TextEditingController genderController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController addressAddress = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   @override
   void initState() {
@@ -35,28 +35,34 @@ class _AddUserScreenState extends State<AddUserScreen> {
     genderController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    addressAddress.dispose();
+    addressController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return  MacosScaffold(
-      toolBar: const ToolBar(
-        title: Text('User'),
+      toolBar: ToolBar(
+        title: const Text('User'),
         titleWidth: 100,
         actions: [
           ToolBarIconButton(
             label: 'Save', 
             icon: MacosIcon(CupertinoIcons.add), 
             showLabel: true,
-            tooltipMessage: 'Add a new user'
+            tooltipMessage: 'Add a new user',
+            onPressed: () {
+              addUser();
+            },
           ),
           ToolBarIconButton(
             label: 'Delete', 
             icon: MacosIcon(CupertinoIcons.delete), 
             showLabel: true,
-            tooltipMessage: 'delete a user'
+            tooltipMessage: 'delete a user',
+            onPressed: () {
+              debugPrint('Delete button clicked');
+            },
           ),
         ],
       ),
@@ -107,7 +113,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                          
                           const Text('Address: '),
                           BaseFormTextField(
-                            controller: addressAddress,
+                            controller: addressController,
                           ),
                         ],
                       ),
@@ -125,5 +131,23 @@ class _AddUserScreenState extends State<AddUserScreen> {
       ],
 
     );
+  }
+
+  void addUser() async {
+    final isValid = _formKey.currentState?.validate();
+
+    if (isValid != null && isValid) {
+      final user  = UserModel(
+        name: firstNameController.text, 
+        lastName: lastNameController.text, 
+        gender: genderController.text, 
+        email: emailController.text, 
+        phone: phoneController.text, 
+        address: addressController.text,
+      );
+
+      final result  = await userBox.add(user);
+      debugPrint(result.toString());
+    }
   }
 }
