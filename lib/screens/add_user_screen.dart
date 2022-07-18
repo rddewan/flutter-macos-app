@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:macos_demo/base/base_form_text_field.dart';
 import 'package:macos_demo/models/user_model.dart';
@@ -14,10 +15,10 @@ class AddUserScreen extends StatefulWidget {
 class _AddUserScreenState extends State<AddUserScreen> {
   late Box<UserModel> userBox;
   final _formKey = GlobalKey<FormState>();
-
+  String? _gender;
+  final List<String> _genders = ['M','F','Other'];
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -32,7 +33,6 @@ class _AddUserScreenState extends State<AddUserScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
-    genderController.dispose();
     emailController.dispose();
     phoneController.dispose();
     addressController.dispose();
@@ -48,7 +48,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
         actions: [
           ToolBarIconButton(
             label: 'Save', 
-            icon: MacosIcon(CupertinoIcons.add), 
+            icon: const MacosIcon(CupertinoIcons.add), 
             showLabel: true,
             tooltipMessage: 'Add a new user',
             onPressed: () {
@@ -71,53 +71,72 @@ class _AddUserScreenState extends State<AddUserScreen> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Text('First Name: '),
-                          BaseFormTextField(
-                            controller: firstNameController,
-                          ),
-                          
-                          const Text('Last Name: '),
-                          BaseFormTextField(
-                            controller: lastNameController,
-                          ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Text('First Name: '),
+                            BaseFormTextField(
+                              controller: firstNameController,
+                            ),
+                            const SizedBox(width: 8,),
+                            const Text('Last Name: '),
+                            BaseFormTextField(
+                              controller: lastNameController,
+                            ),
 
-                        ],
-                      ),
-                      const SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          const Text('Gender: '),
-                          BaseFormTextField(
-                            controller: genderController,
-                          ),
-                         
-                          const Text('Email: '),
-                          BaseFormTextField(
-                            controller: emailController,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          const Text('Phone: '),
-                          BaseFormTextField(
-                            controller: phoneController,
-                          ),
-                         
-                          const Text('Address: '),
-                          BaseFormTextField(
-                            controller: addressController,
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            const Text('Gender: '),
+                            Material(
+                              type: MaterialType.transparency,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width/2.5,
+                                height: 24,
+                                decoration: kDefaultRoundedBorderDecoration,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    value: _gender,
+                                    items: _genders.map(buildMenuItem).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _gender = value.toString();
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8,),
+                            const Text('Email: '),
+                            BaseFormTextField(
+                              controller: emailController,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            const Text('Phone: '),
+                            BaseFormTextField(
+                              controller: phoneController,
+                            ),
+                            const SizedBox(width: 8,),
+                            const Text('Address: '),
+                            BaseFormTextField(
+                              controller: addressController,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 )
           
@@ -133,6 +152,13 @@ class _AddUserScreenState extends State<AddUserScreen> {
     );
   }
 
+  DropdownMenuItem<String> buildMenuItem(String item) => 
+    DropdownMenuItem(
+      value: item,
+      child: Text(item),
+    );
+
+  
   void addUser() async {
     final isValid = _formKey.currentState?.validate();
 
@@ -140,7 +166,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       final user  = UserModel(
         name: firstNameController.text, 
         lastName: lastNameController.text, 
-        gender: genderController.text, 
+        gender: _gender.toString(), 
         email: emailController.text, 
         phone: phoneController.text, 
         address: addressController.text,

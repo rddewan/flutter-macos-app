@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "dart",
+      "request": "launch",
+      "name": "Flutter MacOS: dev",
+      "program": "lib/macos_main.dart",
+      "args": ["-d", "macos"],
+      
+    }
+  ]
+}
