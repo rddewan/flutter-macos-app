@@ -60,10 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
    
     return MacosWindow(
       sidebar: Sidebar(
-        top: Row(
-          children: const [
-            Text('MacOS Demo')
-          ],
+        top: MacosSearchField(
+          placeholder: 'Search ...',
+          results: ['Apple','Boy','Cat','Dog','Egg','Fish','Ball'].map((e) => SearchResultItem(e)).toList(),
+          maxResultsToShow: 3,
+          onResultSelected: (value) {
+            debugPrint(value.searchKey);
+          },
         ),
         builder: ((context, scrollController) {
           return SidebarItems(
