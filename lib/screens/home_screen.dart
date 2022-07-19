@@ -37,6 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const AddUserScreen()));
             },
           ),
+          ToolBarIconButton(
+            label: 'ShowHideSideBar', 
+            icon: MacosIcon(CupertinoIcons.shuffle), 
+            showLabel: false,
+            tooltipMessage: 'Show and hide the sidebar',
+            onPressed: () {
+              MacosWindowScope.of(context).toggleSidebar();              
+            },
+          ),
           ToolBarPullDownButton(
             label: 'Export', 
             icon: CupertinoIcons.ellipsis_circle, 
