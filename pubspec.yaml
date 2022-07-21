@@ -37,6 +37,7 @@ dependencies:
   macos_ui: ^1.7.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  syncfusion_flutter_datagrid: ^20.2.39
 
 dev_dependencies:
   flutter_test:
