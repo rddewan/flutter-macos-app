@@ -111,6 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Material(
                     child: SfDataGrid(
                       source: _userDataSource,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      allowSorting: true,
+                      allowTriStateSorting: true,
+                      frozenColumnsCount: 1,
                       columns: [
                         GridColumn(
                           columnName: 'name', 
@@ -123,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         
                         GridColumn(
                           columnName: 'lastName', 
+                          width: 200,
                           label: Container(
                             padding: const EdgeInsets.all(16),
                             alignment: Alignment.center,
@@ -139,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         GridColumn(
                           columnName: 'email', 
+                          width: 250,
                           label: Container(
                             padding: const EdgeInsets.all(16),
                             alignment: Alignment.center,
@@ -155,6 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         GridColumn(
                           columnName: 'address', 
+                          width: 250,
+                          allowSorting: false,
                           label: Container(
                             padding: const EdgeInsets.all(16),
                             alignment: Alignment.center,
