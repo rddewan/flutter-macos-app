@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:macos_demo/data_grid/user_data_source.dart';
+import 'package:macos_demo/data_grid/user_grid_data_source_editable.dart';
 import 'package:macos_demo/models/user_model.dart';
+import 'package:macos_demo/models/user_model_datagrid.dart';
 import 'package:macos_demo/screens/add_user_screen.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -16,15 +18,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Box<UserModel> userBox;
-  late UserDataSource _userDataSource;
-  late List<UserModel> users;
+  late UserGridDataSourceEditable _userDataSource;
+  late List<UserModelDatGrid> users;
   bool isDataGridView = false;
 
   @override
   void initState() {
     super.initState();
     userBox = Hive.box('user_box');
-    users = userBox.values.map((e) => UserModel(
+    users = userBox.values.map((e) => UserModelDatGrid(
+      id: e.key,
       name: e.name, 
       lastName: e.lastName, 
       gender: e.gender, 
@@ -32,14 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
       phone: e.phone, 
       address: e.address)).toList();
 
-    _userDataSource = UserDataSource(users: users);
+    _userDataSource = UserGridDataSourceEditable(users: users);
   }
 
   @override
   Widget build(BuildContext context) {
     return MacosScaffold(
       toolBar: ToolBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         titleWidth: 100,
         actions: [
           ToolBarIconButton(
@@ -116,7 +119,52 @@ class _HomeScreenState extends State<HomeScreen> {
                       allowSorting: true,
                       allowTriStateSorting: true,
                       frozenColumnsCount: 1,
+                      allowEditing: true,
+                      selectionMode: SelectionMode.single,
+                      navigationMode: GridNavigationMode.cell,
+                      allowSwiping: true,
+                      swipeMaxOffset: 100,
+                      endSwipeActionsBuilder: (context, dataGridRow, rowIndex) {
+                        return GestureDetector(
+                          onTap: () {
+                            showMacosAlertDialog(
+                              context: context, 
+                              builder: (_) => MacosAlertDialog(
+                                appIcon: const MacosIcon(CupertinoIcons.info), 
+                                title: Text(
+                                  'Delete Record', 
+                                  style: MacosTheme.of(context).typography.headline,
+                                ), 
+                                message: const Text('Do you want to delete the record'), 
+                                primaryButton: PushButton(
+                                  buttonSize: ButtonSize.large,
+                                  onPressed: () {                                    
+                                    userBox.deleteAt(rowIndex);
+                                    _userDataSource.dataGridRows.removeAt(rowIndex);
+                                    _userDataSource.updateDateGridSource();
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Delete'), 
+                                ),
+                              ));
+                          },
+                          child: Container(
+                            color: Colors.redAccent,
+                            child: const Center(
+                              child: MacosIcon(CupertinoIcons.delete,color: Colors.white,),
+                            ),
+                          ),
+                        );
+                      },
                       columns: [
+                        GridColumn(
+                          columnName: 'id', 
+                          label: Container(
+                            padding: const EdgeInsets.all(16),
+                            alignment: Alignment.center,
+                            child: const Text('Id'),
+                          ),
+                        ),
                         GridColumn(
                           columnName: 'name', 
                           label: Container(
@@ -125,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Text('Name'),
                           ),
                         ),
-                        
                         GridColumn(
                           columnName: 'lastName', 
                           width: 200,
