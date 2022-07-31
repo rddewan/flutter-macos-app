@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:macos_demo/data_grid/user_data_source.dart';
 import 'package:macos_demo/data_grid/user_grid_data_source_editable.dart';
 import 'package:macos_demo/models/user_model.dart';
 import 'package:macos_demo/models/user_model_datagrid.dart';
 import 'package:macos_demo/screens/add_user_screen.dart';
+import 'package:macos_demo/screens/widget/add_user_ssheet.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -51,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
             showLabel: false,
             tooltipMessage: 'Add new user',
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const AddUserScreen()));
+              showMacosSheet(
+                context: context, 
+                builder: (_) => const AddUserSheet());
+             //Navigator.push(context, MaterialPageRoute(builder: (_) => const AddUserScreen()));
             },
           ),
           ToolBarIconButton(
